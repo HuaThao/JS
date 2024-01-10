@@ -1,0 +1,89 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+}
+
+.head{
+    border-bottom: 1px solid black;
+}
+
+.head .list ul{
+    width: 40%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+}
+
+.head .list ul li{
+    list-style: none;
+}
+
+
+
+.list li a{
+    text-decoration: none;
+}
+
+.head h2{
+    max-width: 500px;
+    font-weight: normal;
+    border-bottom: 3px solid black;
+    margin-left: 50px;
+}
+
+.mid{
+    width: 95%;
+    margin: 0 auto;
+}
+
+.mid .boder-p{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+}
+
+.mid .col-3 img{
+    width: 400px;
+}
+
+.mid .col-3 button{
+    padding: 10px;
+    border-radius: 7%;
+    margin-left: 275px;
+}
+
+.line-through{
+    text-decoration: line-through;
+}
+
+.mid .col-6{
+    height: 830px;
+    background-image: url(./anh/hinh3.jpg);
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.viewall{
+    width: 70%;
+    margin: 0 auto;
+}
+
+.viewall button{
+    padding: 20px 30px;
+}
+
+button{
+    color: white;
+    background-color: red;
+    border: none;
+}
+
+.buttonR{
+    margin-top: 51px;
+}
+
+.cost{
+    font-weight: bold;
+}

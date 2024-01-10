@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Learning JavaScript</h1>
+
+    <script>
+        function chuvi(a,b){
+            return (a+b)*2
+        }
+        function dientich(a,b){
+            return a*b
+        }
+
+        var a = parseInt(prompt("Nhập a"))
+        var b = parseInt(prompt("Nhập b"))
+        var Chuvi = chuvi(a,b)
+        var Dientich = dientich(a,b)
+
+        document.write("Chu vi của hình chữ nhật " + a + " và " + b + " là " + Chuvi + "<br>" )
+        document.write("Diện tích của hình chữ nhật " + a + " và " + b + " là " + Dientich + "<br>")
+    </script>
+</body>
+</html>
