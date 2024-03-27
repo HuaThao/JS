@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Correct Destination</title>
+  <!-- Link tới Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1 class="mt-5 mb-4">Correct Destination</h1>
+
+    <!-- Form sửa thông tin điểm du lịch -->
+    <form id="correctForm" class="mb-4">
+      <div class="form-group">
+        <label for="correctId">Enter ID of Destination to Correct:</label>
+        <input type="number" id="correctId" name="correctId" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="correctName">New Name:</label>
+        <input type="text" id="correctName" name="correctName" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="correctDescription">New Description:</label>
+        <input type="text" id="correctDescription" name="correctDescription" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="correctDescription">New Rate:</label>
+        <input type="text" id="correctRating" name="correctRating" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="correctDescription">New Cost:</label>
+        <input type="text" id="correctCost" name="correctCost" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="correctDescription">New Image:</label>
+        <input type="text" id="correctImage" name="correctImage" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Correct</button>
+    </form>
+
+    <!-- Kết quả thông báo sửa -->
+    <div id="correctMessage"></div>
+  </div>
+
+  <!-- Link tới Bootstrap JS và jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Script để xử lý sửa thông tin điểm du lịch -->
+  <script>
+    let destinations = JSON.parse(localStorage.getItem('destinations')) || [];
+    const correctForm = document.getElementById('correctForm');
+    const correctMessage = document.getElementById('correctMessage');
+
+    correctForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const correctId = parseInt(document.getElementById('correctId').value);
+      const correctName = document.getElementById('correctName').value.trim();
+      const correctDescription = document.getElementById('correctDescription').value.trim();
+      const correctRating = document.getElementById('correctRating').value.trim();
+      const correctCost = document.getElementById('correctCost').value.trim();
+      const correctImage = document.getElementById('correctImage').value.trim();
+      
+
+      const destination = destinations.find(dest => dest.id === correctId);
+      if (destination) {
+        destination.name = correctName;
+        destination.description = correctDescription;
+        destination.rating = correctRating;
+        destination.cost = correctCost;
+        destination.image = correctImage;
+        localStorage.setItem('destinations', JSON.stringify(destinations));
+        correctMessage.innerHTML = `<div class="alert alert-success mt-3" role="alert">Destination corrected successfully!</div>`;
+      } else {
+        correctMessage.innerHTML = `<div class="alert alert-danger mt-3" role="alert">Destination not found!</div>`;
+      }
+    });
+  </script>
+</body>
+</html>

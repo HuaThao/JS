@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Destinations</title>
+  <!-- Link tới Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1 class="mt-5 mb-4">Travel Destinations</h1>
+
+    <!-- Form tìm kiếm -->
+    <form id="searchForm" class="mb-4">
+      <div class="form-group">
+        <label for="searchTerm">Search by Name:</label>
+        <input type="text" id="searchTerm" name="searchTerm" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <!-- Button "Thêm" -->
+    <a href="add.html" class="btn btn-success mb-4">Add New Destination</a>
+    <a href="delete.html" class="btn btn-success mb-4">Delete Destination</a>
+    <a href="correct.html" class="btn btn-success mb-4">Correct Destination</a>
+
+    <!-- Danh sách điểm du lịch -->
+    <div id="destinationsContainer" class="row"></div>
+  </div>
+
+  <!-- Link tới Bootstrap JS và jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Script để hiển thị danh sách điểm du lịch và xử lý tìm kiếm -->
+  <script>
+    // Lấy dữ liệu từ localStorage khi trang được tải
+    let destinations = JSON.parse(localStorage.getItem('destinations')) || [];
+
+    const destinationsContainer = document.getElementById('destinationsContainer');
+    const searchForm = document.getElementById('searchForm');
+
+    // Hiển thị danh sách các điểm du lịch dưới dạng card
+    function displayDestinations(dests) {
+      destinationsContainer.innerHTML = ''; // Xóa nội dung cũ
+      dests.forEach(destination => {
+        const card = document.createElement('div');
+        card.classList.add('col-md-4', 'mb-3');
+        card.innerHTML = `
+          <div class="card">
+            <img src="${destination.image}" class="card-img-top" alt="${destination.name}">
+            <div class="card-body">
+              <h5 class="card-title">${destination.name}</h5>
+              <p class="card-text">${destination.description}</p>
+              <a href="detail.html?id=${destination.id}" class="btn btn-primary">View Details</a>
+            </div>
+          </div>
+        `;
+        destinationsContainer.appendChild(card);
+      });
+    }
+
+    // Xử lý sự kiện submit của form tìm kiếm
+    searchForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const searchTerm = document.getElementById('searchTerm').value.trim().toLowerCase();
+
+      const searchResults = destinations.filter(dest => dest.name.toLowerCase().includes(searchTerm));
+      displayDestinations(searchResults);
+    });
+
+    // Hiển thị tất cả điểm du lịch khi trang được tải
+    displayDestinations(destinations);
+  </script>
+</body>
+</html>

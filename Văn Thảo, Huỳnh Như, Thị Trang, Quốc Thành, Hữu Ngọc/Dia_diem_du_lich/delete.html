@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete Destination</title>
+  <!-- Link tới Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1 class="mt-5 mb-4">Delete Destination</h1>
+
+    <!-- Danh sách hiển thị điểm du lịch -->
+    <ul id="destinationList" class="list-group mb-4">
+      <!-- Dữ liệu điểm du lịch sẽ được thêm vào đây bằng JavaScript -->
+    </ul>
+
+    <!-- Kết quả thông báo xóa -->
+    <div id="deleteMessage"></div>
+  </div>
+
+  <!-- Link tới Bootstrap JS và jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Script để xử lý xóa điểm du lịch -->
+  <script>
+    let destinations = JSON.parse(localStorage.getItem('destinations')) || [];
+    const destinationList = document.getElementById('destinationList');
+    const deleteMessage = document.getElementById('deleteMessage');
+
+    // Hiển thị danh sách điểm du lịch dưới dạng danh sách dọc
+    function renderDestinations() {
+      destinationList.innerHTML = ''; // Xóa dữ liệu cũ trong danh sách
+      destinations.forEach((dest, index) => {
+        const listItem = document.createElement('li');
+        listItem.className = 'list-group-item';
+        listItem.innerHTML = `
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>${dest.name}</strong><br>
+              <span>${dest.location}</span>
+            </div>
+            <div>
+              <input type="checkbox" name="deleteCheckbox" value="${dest.id}">
+            </div>
+          </div>
+        `;
+        destinationList.appendChild(listItem);
+      });
+    }
+
+    // Gọi hàm để hiển thị danh sách khi trang được tải
+    renderDestinations();
+
+    // Xử lý sự kiện khi form được submit để xóa các điểm du lịch đã chọn
+    const deleteForm = document.createElement('form');
+    deleteForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const checkboxes = document.querySelectorAll('input[name="deleteCheckbox"]:checked');
+
+      if (checkboxes.length > 0) {
+        checkboxes.forEach(checkbox => {
+          const deleteId = parseInt(checkbox.value);
+          const index = destinations.findIndex(dest => dest.id === deleteId);
+          if (index !== -1) {
+            destinations.splice(index, 1);
+          }
+        });
+
+        localStorage.setItem('destinations', JSON.stringify(destinations));
+        renderDestinations(); // Cập nhật lại danh sách sau khi xóa
+        deleteMessage.innerHTML = `<div class="alert alert-success mt-3" role="alert">Destinations deleted successfully!</div>`;
+      } else {
+        deleteMessage.innerHTML = `<div class="alert alert-danger mt-3" role="alert">Please select at least one destination to delete!</div>`;
+      }
+    });
+
+    // Thêm form vào cuối trang và button Delete
+    deleteForm.appendChild(destinationList);
+    deleteForm.innerHTML += '<button type="submit" class="btn btn-danger mt-3">Delete Selected</button>';
+    document.body.appendChild(deleteForm);
+  </script>
+</body>
+</html>
