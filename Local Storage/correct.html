@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Destination</title>
+  <!-- Link tới Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1 class="mt-5 mb-4">Edit Destination</h1>
+
+    <!-- Form chọn và sửa thông tin điểm du lịch -->
+    <form id="editForm" class="mb-4">
+      <div class="form-group">
+        <label for="editId">Enter ID of Destination to Edit:</label>
+        <input type="number" id="editId" name="editId" class="form-control" required>
+      </div>
+      <button type="button" onclick="loadDestination()" class="btn btn-primary">Load Destination</button>
+
+      <!-- Dữ liệu địa danh sẽ được hiển thị ở đây -->
+      <div id="destinationInfo" class="mt-4"></div>
+
+      <!-- Các trường để sửa thông tin địa danh -->
+      <div id="editFields" style="display: none;">
+        <div class="form-group">
+          <label for="editName">New Name:</label>
+          <input type="text" id="editName" name="editName" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="editDescription">New Description:</label>
+          <input type="text" id="editDescription" name="editDescription" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="editRating">New Rate:</label>
+          <input type="text" id="editRating" name="editRating" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="editCost">New Cost:</label>
+          <input type="text" id="editCost" name="editCost" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="editImage">New Image:</label>
+          <input type="text" id="editImage" name="editImage" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+
+    <!-- Kết quả thông báo sửa -->
+    <div id="editMessage"></div>
+  </div>
+
+  <!-- Link tới Bootstrap JS và jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Script để xử lý sửa thông tin điểm du lịch -->
+  <script>
+    let destinations = JSON.parse(localStorage.getItem('destinations')) || [];
+    const editForm = document.getElementById('editForm');
+    const destinationInfo = document.getElementById('destinationInfo');
+    const editFields = document.getElementById('editFields');
+    const editMessage = document.getElementById('editMessage');
+
+    function loadDestination() {
+      const editId = parseInt(document.getElementById('editId').value);
+      const destination = destinations.find(dest => dest.id === editId);
+
+      if (destination) {
+        destinationInfo.innerHTML = `
+          <h3>Destination Details</h3>
+          <p><strong>ID:</strong> ${destination.id}</p>
+          <p><strong>Name:</strong> ${destination.name}</p>
+          <p><strong>Description:</strong> ${destination.description}</p>
+          <p><strong>Rating:</strong> ${destination.rating}</p>
+          <p><strong>Cost:</strong> ${destination.cost}</p>
+          <p><strong>Image:</strong> ${destination.image}</p>
+        `;
+        // Hiển thị các trường sửa thông tin và điều chỉnh giá trị trước đó
+        document.getElementById('editName').value = destination.name;
+        document.getElementById('editDescription').value = destination.description;
+        document.getElementById('editRating').value = destination.rating;
+        document.getElementById('editCost').value = destination.cost;
+        document.getElementById('editImage').value = destination.image;
+        
+        editFields.style.display = 'block'; // Hiển thị form sửa thông tin
+        editMessage.innerHTML = ''; // Xóa thông báo trước đó (nếu có)
+      } else {
+        destinationInfo.innerHTML = `<div class="alert alert-danger mt-3" role="alert">Destination not found!</div>`;
+        editFields.style.display = 'none'; // Ẩn form sửa thông tin nếu không tìm thấy địa danh
+      }
+    }
+
+    editForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const editId = parseInt(document.getElementById('editId').value);
+      const editName = document.getElementById('editName').value.trim();
+      const editDescription = document.getElementById('editDescription').value.trim();
+      const editRating = document.getElementById('editRating').value.trim();
+      const editCost = document.getElementById('editCost').value.trim();
+      const editImage = document.getElementById('editImage').value.trim();
+
+      const destination = destinations.find(dest => dest.id === editId);
+      if (destination) {
+        destination.name = editName;
+        destination.description = editDescription;
+        destination.rating = editRating;
+        destination.cost = editCost;
+        destination.image = editImage;
+        localStorage.setItem('destinations', JSON.stringify(destinations));
+        editMessage.innerHTML = `<div class="alert alert-success mt-3" role="alert">Destination edited successfully!</div>`;
+      } else {
+        editMessage.innerHTML = `<div class="alert alert-danger mt-3" role="alert">Destination not found!</div>`;
+      }
+    });
+  </script>
+</body>
+</html>

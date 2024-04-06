@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Destination Details</title>
+  </head>
+  <body>
+    <h1>Destination Details</h1>
+    <div id="destinationDetail"></div>
+
+    <!-- Script để hiển thị thông tin chi tiết của điểm du lịch -->
+    <script src="data.js"></script>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const destinationId = parseInt(urlParams.get("id"));
+
+      const destinationDetailContainer =
+        document.getElementById("destinationDetail");
+      const destination = destinations.find(
+        (dest) => dest.id === destinationId
+      );
+
+      if (destination) {
+        const detail = document.createElement("div");
+        detail.innerHTML = `
+        <h2>${destination.name}</h2>
+        <img src="${destination.image}" alt="${
+          destination.name
+        }" style="width: 300px;">
+        <p>${destination.description}</p>
+        <p>Rating: ${destination.rating}</p>
+        <p>Cost: ${destination.cost}</p>
+        <p>Tags: ${destination.tags.join(", ")}</p>
+      `;
+        destinationDetailContainer.appendChild(detail);
+      } else {
+        destinationDetailContainer.textContent = "Destination not found";
+      }
+    </script>
+  </body>
+</html>
