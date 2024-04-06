@@ -1,0 +1,172 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Data Cards</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Tùy chỉnh CSS */
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin: 10px;
+      width: 300px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card img {
+      width: 100%;
+      border-radius: 5px 5px 0 0;
+    }
+    .card-body {
+      padding: 20px;
+    }
+    .button-container {
+      margin-top: 20px;
+    }
+    .button-container button {
+      margin-right: 10px;
+    }
+
+  </style>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1 class="text-center">Các địa điểm du lịch</h1>
+    <div>
+      <!-- Search input and button -->
+      <input type="text" id="searchInput" placeholder="Search..." />
+      <button onclick="search()">Search</button>
+    </div>
+    <!-- Button to open the modal form -->
+    <!-- Button to open the modal form -->
+    <button id="show-add-form">Add New Item</button>
+
+    <!-- The Modal -->
+    <div id="myModal" style="display: none">
+      <!-- Modal content -->
+      <div>
+        <span class="close">&times;</span>
+        <form id="addForm">
+          Name: <input type="text" id="itemName" required /><br />
+          Description: <input type="text" id="itemDescription" required /><br />
+          Image URL: <input type="text" id="itemImage" required /><br />
+          Rating: <input type="number" id="itemRating" required /><br />
+          Cost: <input type="text" id="itemCost" required /><br />
+          Tags: <input type="text" id="itemTags" required /><br />
+          <button type="submit">Add Item</button>
+        </form>
+      </div>
+    </div>
+    <!-- Modal Sửa Thông Tin -->
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="editForm">
+          <input type="hidden" id="editId" />
+          <label for="editName">Tên:</label>
+          <input type="text" id="editName" name="name" />
+          <label for="editDescription">Mô Tả:</label>
+          <input type="text" id="editDescription" name="description" />
+          <label for="editRating">Rating:</label>
+          <input type="text" id="editRating" name="rating" />
+          <label for="editCost">Cost:</label>
+          <input type="text" id="editCost" name="cost" />
+          <label for="editTags">Tags:</label>
+          <input type="text" id="editTags" name="tags" />
+          <label for="editImage">Image URL:</label>
+          <input type="text" id="editImage" name="image" />
+          <button type="submit">Lưu</button>
+        </form>
+      </div>
+    </div>
+    <!-- Modal Chi Tiết -->
+<div id="detailModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div id="productDetails">
+      <img id="detailImage" src="" alt="Product Image">
+      <h2 id="detailName"></h2>
+      <p><strong>Mô Tả:</strong> <span id="detailDescription"></span></p>
+      <p><strong>Rating:</strong> <span id="detailRating"></span></p>
+      <p><strong>Cost:</strong> <span id="detailCost"></span></p>
+      <p><strong>Tags:</strong> <span id="detailTags"></span></p>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div id="cards-container" class="d-flex flex-wrap justify-content-around"></div>
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <div id="cards-container"></div>
+    <script>
+      // Lấy dữ liệu từ API và hiển thị dưới dạng thẻ card
+      fetch("https://661004780640280f219c1a67.mockapi.io/api/travel/data")
+        .then((response) => response.json())
+        .then((data) => {
+          const cardsContainer = document.getElementById("cards-container");
+          data.forEach((item) => {
+            const card = document.createElement("div");
+            card.classList.add("card");
+
+            const image = document.createElement("img");
+            image.src = item.image;
+            card.appendChild(image);
+
+            const name = document.createElement("h3");
+            name.textContent = item.name;
+            card.appendChild(name);
+
+            const description = document.createElement("p");
+            description.textContent = item.description;
+            card.appendChild(description);
+
+            const rating = document.createElement("p");
+            rating.textContent = "Rating: " + item.rating;
+            card.appendChild(rating);
+
+            const cost = document.createElement("p");
+            cost.textContent = "Cost: " + item.cost;
+            card.appendChild(cost);
+
+            const tags = document.createElement("p");
+            tags.textContent = "Tags: " + item.tags;
+            card.appendChild(tags);
+
+            const id = document.createElement("p");
+            id.textContent = "ID: " + item.id;
+            card.appendChild(id);
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Xóa";
+            deleteButton.onclick = function () {
+              deleteItem(item.id, card);
+            };
+
+            card.appendChild(deleteButton);
+
+            const cardsContainer = document.getElementById("cards-container");
+            const editButton = document.createElement("button");
+            editButton.textContent = "Sửa";
+            editButton.onclick = function () {
+              showEditForm(item);
+            };
+
+            card.appendChild(editButton);
+            const viewDetailButton = document.createElement("button");
+  viewDetailButton.textContent = "Xem Chi Tiết";
+  viewDetailButton.onclick = function() { showProductDetails(item); };
+
+  card.appendChild(viewDetailButton);
+
+            cardsContainer.appendChild(card);
+          });
+        })
+        .catch((error) => console.error("Error fetching data:", error));
+    </script>
+    <script src="admin.js"></script>
+    
+  </body>
+</html>
